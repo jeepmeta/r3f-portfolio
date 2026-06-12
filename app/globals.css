@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+/* --------------------------------------------------
+   ROOT THEME VARIABLES
+-------------------------------------------------- */
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+
+  /* Brand colors */
+  --accent-cyan: #00ffff;
+  --accent-green: #00ff88;
+
+  /* Fonts (Geist) */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Light mode (rarely used) */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f5f5f5;
+    --foreground: #111111;
+  }
+}
+
+/* --------------------------------------------------
+   TAILWIND THEME BRIDGE
+-------------------------------------------------- */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-green: var(--accent-green);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* --------------------------------------------------
+   GLOBAL BASELINE
+-------------------------------------------------- */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  overflow: hidden; /* Full-screen 3D world */
+  touch-action: none; /* Prevent accidental scroll/pinch on Canvas */
+}
+
+/* Canvas must remain untouched */
+canvas {
+  display: block;
+  outline: none;
+  touch-action: none;
+}
+
+/* Smooth rendering for hologram effects */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------
+   UI ROOT LAYER
+-------------------------------------------------- */
+
+.ui-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none; /* 3D world gets events by default */
+}
+
+.ui-interactive {
+  pointer-events: auto; /* opt-in for buttons, HUD, etc. */
+}
+
+/* --------------------------------------------------
+   RESPONSIVE TUNING
+-------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .hud-title {
+    font-size: 1.5rem !important;
+  }
+
+  .crypto-card {
+    min-width: 140px !important;
+    padding: 0.5rem !important;
+  }
+
+  .cta-button {
+    padding: 0.75rem 2rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hud-title {
+    font-size: 2rem !important;
+  }
+}
+
+/* Touch devices: reduce motion */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* --------------------------------------------------
+   CUSTOM SCROLLBAR
+-------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------
+   UTILITY ANIMATIONS
+-------------------------------------------------- */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* -------------------------------------------------------
+   Jeepmeta Global Hologram Theme Engine
+   Every hologram component reads from these variables.
+------------------------------------------------------- */
+
+:root {
+  /* Core Colors */
+  --jm-primary: #36b8d0;
+  --jm-secondary: #d3bb8f;
+  --jm-accent: #ffeec2;
+
+  /* Base Material */
+  --jm-opacity: 1;
+  --jm-glow-intensity: 1.5;
+  --jm-emissive-intensity: 1.4;
+  --jm-surface-roughness: 0.25;
+  --jm-surface-transmission: 0.1;
+  --jm-surface-ior: 0.25;
+
+  /* Scanlines */
+  --jm-scanline-opacity: 0.15;
+  --jm-scanline-speed: 2s;
+  --jm-scanline-thickness: 1.5%;
+
+  /* Pulse */
+  --jm-pulse-speed: 3s;
+  --jm-pulse-intensity: 0.4;
+
+  /* Shimmer */
+  --jm-shimmer-speed: 4s;
+  --jm-shimmer-intensity: 0.25;
+
+  /* Noise */
+  --jm-noise-strength: 0.15;
+  --jm-noise-speed: 1.8s;
+
+  /* Global hologram rhythm */
+  --jm-rhythm-speed: 12s;
+  --jm-rhythm-intensity: 0.2;
+}
+
+/* -------------------------------------------------------
+   Global Keyframes
+   These do not animate DOM elements directly.
+   Components read timing + intensity values from here.
+------------------------------------------------------- */
+
+@keyframes jm-scanlines {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes jm-pulse {
+  0% { opacity: calc(1 - var(--jm-pulse-intensity)); }
+  50% { opacity: 1; }
+  100% { opacity: calc(1 - var(--jm-pulse-intensity)); }
+}
+
+@keyframes jm-shimmer {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(calc(1 + var(--jm-shimmer-intensity))); }
+  100% { filter: brightness(1); }
+}
+
+@keyframes jm-noise {
+  0% { opacity: 0.9; }
+  50% { opacity: calc(0.9 - var(--jm-noise-strength)); }
+  100% { opacity: 0.9; }
+}
+
+@keyframes jm-rhythm {
+  0% { opacity: 1; }
+  50% { opacity: calc(1 - var(--jm-rhythm-intensity)); }
+  100% { opacity: 1; }
+}

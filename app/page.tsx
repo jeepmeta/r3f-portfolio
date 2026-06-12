@@ -1,0 +1,76 @@
+"use client";
+
+import { Canvas } from "@react-three/fiber";
+import { Suspense, useMemo } from "react";
+import * as THREE from "three";
+
+import { useDevice, getCameraSettings } from "@/hooks/useDevice";
+import Scene from "@/components/scene/Scene";
+import { Effects } from "@/components/scene/effects";
+import { useSection, Section } from "@/stores/useSection";
+import { SocialIconsOrbit } from "@/components/connect/SocialIconsOrbit";
+import { CodeOrbit } from "@/components/code/CodeOrbit";
+import { NavText } from "@/components/textGeometry/NavText";
+import MatrixRainWipe from "@/components/boot/MatrixRain";
+import TerminalBoot from "@/components/boot/TerminalBoot";
+
+const sections = {
+  code: CodeOrbit,
+  connections: SocialIconsOrbit,
+};
+
+function LoadingScreen() {
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-50">
+      <div className="relative">
+        <div className="w-16 h-16 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-8 h-8 bg-cyan-500/20 rounded-full animate-pulse" />
+        </div>
+      </div>
+      <p className="mt-6 text-cyan-400 font-mono text-sm tracking-widest animate-pulse">
+        INITIALIZING...
+      </p>
+    </div>
+  );
+}
+
+export default function Home() {
+  const { isMobile } = useDevice();
+  const cameraSettings = useMemo(() => getCameraSettings(isMobile), [isMobile]);
+
+  const section = useSection((s) => s.section);
+  const DynamicContent = sections[section];
+
+  const handleNavigate = (section: Section) => {
+    useSection.getState().setSection(section);
+  };
+
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-black">
+      <TerminalBoot />
+      <MatrixRainWipe />
+      <Canvas
+        camera={{ position: cameraSettings.position, fov: cameraSettings.fov }}
+        dpr={cameraSettings.dpr}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: "high-performance",
+        }}
+        onCreated={({ gl }) => {
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+          gl.toneMapping = THREE.NoToneMapping;
+        }}
+        style={{ position: "absolute", inset: 0 }}
+      >
+        <Suspense fallback={<LoadingScreen />}>
+          <Scene />
+          <NavText onNavigate={handleNavigate} />
+          <Effects />
+          <DynamicContent />
+        </Suspense>
+      </Canvas>
+    </main>
+  );
+}

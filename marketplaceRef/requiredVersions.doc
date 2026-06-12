@@ -1,0 +1,12 @@
+📘 Minimum Required Versions
+These versions ensure compatibility across all Jeepmeta marketplace components.
+
+Package	Minimum Version	Why It Matters
+three	0.183.0	Modern geometry, SVGLoader compatibility, WebGL2 stability
+@react-three/fiber	9.5.0	Correct JSX typing, stable hooks, event system
+@react-three/drei	10.7.0	Updated helpers, loaders, abstractions
+@react-spring/core	10.0.0	Physics‑based animation engine
+@react-spring/three	10.0.0	3D animation support
+postprocessing	6.38.0	Bloom, glow, color grading
+@react-three/postprocessing	3.0.0	R3F bindings for postprocessing
+zustand	5.0.0	Optional global state
