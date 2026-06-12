@@ -18,7 +18,7 @@ export default function MatrixRain3D() {
 
     // NEW: Delay before rain starts
     let start = false;
-    const delay = 2300; // ms
+    const delay = 0; // ms
     setTimeout(() => {
       start = true;
     }, delay);

@@ -11,6 +11,7 @@ const FONT_URL =
   "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/fonts/helvetiker_bold.typeface.json";
 
 const NAV_ITEMS: NavItemData[] = [
+  { label: "DEVELOPER PORTFOLIO", section: "developer portfolio" as Section },
 ];
 
 interface NavTextProps {

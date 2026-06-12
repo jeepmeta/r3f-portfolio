@@ -7,6 +7,7 @@ export const socials = [
   { name: "Medium", url: "https://medium.com/@jeepmeta" },
   { name: "Reddit", url: "https://www.reddit.com/user/jeepmeta" },
   { name: "Discord", url: "https://discord.com/users/1109274133902143498" },
+  { name: "DoginalDogs", url: "https://doginaldogs.com" },
 ] as const;
 
 export type SocialName = (typeof socials)[number]["name"];

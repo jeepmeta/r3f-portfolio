@@ -12,7 +12,6 @@ import { SocialIconsOrbit } from "@/components/connect/SocialIconsOrbit";
 import { CodeOrbit } from "@/components/code/CodeOrbit";
 import { NavText } from "@/components/textGeometry/NavText";
 import MatrixRainWipe from "@/components/boot/MatrixRain";
-import TerminalBoot from "@/components/boot/TerminalBoot";
 
 const sections = {
   code: CodeOrbit,
@@ -48,7 +47,6 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-black">
-      <TerminalBoot />
       <MatrixRainWipe />
       <Canvas
         camera={{ position: cameraSettings.position, fov: cameraSettings.fov }}
