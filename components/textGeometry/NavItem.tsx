@@ -20,10 +20,8 @@ interface NavItemProps {
 }
 
 export const NavItem = memo(function NavItem({
-  item,
   geometry,
   xPos,
-  onNavigate,
 }: NavItemProps) {
   const groupRef = useRef<THREE.Group | null>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial | null>(null);
@@ -39,7 +37,6 @@ export const NavItem = memo(function NavItem({
   const handleClick = () => {
     anim.startFlip();
     anim.triggerClickPulse();
-    onNavigate(item.section);
   };
 
   useFrame((_, delta) => {

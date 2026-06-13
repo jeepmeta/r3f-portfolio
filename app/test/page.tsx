@@ -3,7 +3,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { useState } from "react";
-import { HoloPlane } from "@/components/marketplace/HoloPlane";
 
 export default function Page() {
   const [mode, setMode] = useState<"none" | "minimal" | "full">("none");
@@ -102,8 +101,6 @@ export default function Page() {
           <meshStandardMaterial color="#111" />
         </mesh>
 
-        {/* Drop any Jeepmeta component here */}
-        <HoloPlane position={[0, 1, 0]} />
       </Canvas>
     </div>
   );
