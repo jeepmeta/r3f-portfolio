@@ -3,7 +3,6 @@
 
 import { useRef } from "react";
 import { Group } from "three";
-import { DogCubes } from "./voxels/DogCubes";
 import { Environment } from "./environment";
 import { HolographicParticles } from "./HolographicParticles";
 import { Lighting } from "./lighting";
@@ -14,17 +13,11 @@ export default function Scene() {
   const groupRef = useRef<Group>(null);
   const { isMobile, isLowEnd } = useDevice();
 
-  const quality = isLowEnd ? "low" : isMobile ? "medium" : "high";
 
   return (
     <group ref={groupRef}>
       <Environment />
       <Lighting />
-      <DogCubes 
-        position={[0, 0.8, 0]} 
-        scale={1.8} 
-        quality={quality} 
-      />
       <HolographicParticles 
         count={isMobile ? 30 : isLowEnd ? 35 : 50} 
       />
