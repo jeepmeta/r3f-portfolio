@@ -38,7 +38,7 @@
     "types/**/*.d.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "hooks/useNavItemAnimation.ts", "hooks/useTextGeometry.ts"  ],
   "exclude": [
     "node_modules"
   ]

@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import { NAV_CONFIG } from "./navConfig";
-import { createTextGeometry, loadFont } from "./useTextGeometry";
+import { createTextGeometry, loadFont } from "@/hooks/useTextGeometry";
 import { NavItem, type NavItemData } from "./NavItem";
 import type { Section } from "@/stores/useSection";
 import { useMobile } from "@/hooks/useMobile";

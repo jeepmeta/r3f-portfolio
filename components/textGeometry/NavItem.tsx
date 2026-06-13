@@ -3,8 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Section } from "@/stores/useSection";
 import { NAV_CONFIG } from "./navConfig";
-import { computeGeometryMetrics } from "./useTextGeometry";
-import { useNavItemAnimation } from "./useNavItemAnimation";
+import { computeGeometryMetrics } from "@/hooks/useTextGeometry";
+import { useNavItemAnimation } from "@/hooks/useNavItemAnimation";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 
 export interface NavItemData {

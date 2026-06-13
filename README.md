@@ -1,279 +1,149 @@
-================================================================================ Jeepmeta — Holographic 3D Portfolio & Creator Platform
+# 🚀 R3F Portfolio — Jeepmeta
 
-Project Purpose and Vision
+**A holographic, sci-fi, crypto-flavored 3D experience** built with React Three Fiber.  
+This project serves as a **personal portfolio** and a **living product** — showcasing advanced 3D UI, shader work, interactive elements, and animation.
 
-Jeepmeta is a holographic, sci‑fi, crypto‑flavored 3D experience built as both a portfolio and a product. It showcases the creator’s skills in animation, 3D UI, shader design, and interactive storytelling while also serving as a monetization engine for services, components, and collaborations.
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)  
+[![React Three Fiber](https://img.shields.io/badge/R3F-React%20Three%20Fiber-00bfff?style=for-the-badge)](https://docs.pmnd.rs/react-three-fiber)  
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 
-Aesthetic Blend
+---
 
-Holographic sci‑fi HUDs
+## ✨ Overview
 
-Playful crypto culture
+Jeepmeta’s R3F Portfolio is a next-generation 3D web experience that fuses:
 
-Pixel‑art nostalgia
+- **Holographic sci-fi HUD aesthetics** — glowing spherical interfaces, custom shaders, and post-processing effects
+- **Playful crypto culture** — DOGE / “Do Only Good Everyday” ethos, interactive visualizations
+- **Pixel-art nostalgia** — voxel-style DogCubes and retro-inspired 3D elements
 
-DOGE / Do Only Good Everyday ethos
+It demonstrates deep expertise in **React Three Fiber**, custom Three.js materials, performant animations, and production-grade architecture (strict TypeScript, modular components, Zustand state, responsive design).
 
-Jeepmeta as a creator brand: The app is a single‑page, state‑driven R3F experience where each section is a scene, each scene is a hologram, and every hologram is a brand moment.
+---
 
-Tech Stack and TypeScript Rules
+## 🌌 Key Features
 
-Core Stack
+- **Voxel Pixel-Art Dogs (DogCubes)**  
+  3D voxel-style representations powered by `dog_pixels.json` data. Ties directly into the Doginal Dogs / DOGE cultural layer with nostalgic pixel charm.
 
-Next.js 16 (App Router)
+- **Text Geometry Navigation**  
+  3D text-based nav items using custom `useTextGeometry` hook for crisp, performant typography in the 3D scene.
 
-React 19
+- **Dynamic Scene Composition**  
+  `Scene.tsx` orchestrates lighting, `HolographicParticles`, `CameraController`, and layered 3D content with device-aware responsiveness (`useDevice`, `useMobile`).
 
-TypeScript 5 (strict mode)
+- **State-Driven Experience**  
+  Zustand stores (`useSection`, `useOverlay`, `useCryptoSphere`) power seamless section transitions, modal overlays, and synchronized UI/3D state.
 
-Three.js
+- **Production Polish**  
+  - Next.js 16 App Router + React 19  
+  - Pure custom holographic/neon CSS  
+  - Post-processing effects via `@react-three/postprocessing`  
+  - Asset pipeline (SVG → canvas textures, extraction scripts)  
+  - Strict TypeScript throughout
 
-@react-three/fiber
+---
 
-@react-three/drei
+## 🛠 Tech Stack
 
-@react-three/postprocessing
+| Category          | Technologies |
+|-------------------|--------------|
+| Framework         | Next.js 16 (App Router) |
+| Language          | TypeScript 5 (strict mode) |
+| 3D Rendering      | React Three Fiber, Three.js, @react-three/drei, @react-three/postprocessing |
+| Animation         | @react-spring/three, GSAP, @gsap/react |
+| State Management  | Zustand |
+| Styling           | Pure CSS |
+| Architecture      | Modular components, custom hooks & materials, typed stores |
+| Assets            | Canvas-generated textures, JSON voxel data (`dog_pixels.json`) |
 
-@react-spring/three + @react-spring/core
+---
 
-GSAP + @gsap/react
+## 🚀 Getting Started
 
-Zustand
+### Prerequisites
+- Node.js 18+
+- pnpm (recommended) or npm/yarn
 
-Tailwind 4
+### Installation
 
-canvas (SVG → texture)
+```bash
+git clone https://github.com/jeepmeta/r3f-portfolio.git
+cd r3f-portfolio
+pnpm install
+```
 
-TypeScript Rules
+### Development
 
-strict: true enforced globally
+```bash
+pnpm dev
+```
 
-No implicit any
+Open [http://localhost:3000](http://localhost:3000) — the experience runs fully client-side with live 3D interactions.
 
-All configuration objects must have dedicated interfaces
+### Build & Deploy
 
-Shared types live under types/ or components/holograms/types/
+```bash
+pnpm build
+pnpm start
+```
 
-Geometry, layout, materials, and interactions must not mix concerns
+Deploy easily to Vercel (recommended) or any platform supporting Next.js.
 
-Hooks return typed objects, never loose bags of data
+---
 
-File Tree Reference
+## 🎨 Design Philosophy & Brand
 
-. |-- README.md |-- PROJECT_PAGE.md |-- app |   |-- globals.css |   |-- layout.tsx |   -- page.tsx |-- components |   |-- Icons.tsx |   |-- boot |   |   |-- MatrixRain.tsx |   |   -- TerminalBoot.tsx |   |-- code |   |   -- CodeOrbit.tsx |   |-- componentsUI |   |   -- ComponentsPanels.tsx |   |-- connect |   |   |-- SocialIconsOrbit.tsx |   |   -- socialConfig.ts |   |-- crypto |   |   |-- CryptoSphere.tsx |   |   |-- CryptoTicker.tsx |   |   -- ExpandedChartOverlay.tsx |   |-- holograms |   |   |-- HologramSphere.tsx |   |   |-- materials |   |   |   |-- HologramGlyphMaterial.ts |   |   |   |-- HologramSVGPanelMaterial.ts |   |   |   |-- HologramScanlineMaterial.ts |   |   |   -- HologramSphereMaterial.ts |   |   |-- SphericalAnchor.tsx |   |   |-- SphericalPatch.tsx |   |   |-- SphericalSurface.tsx |   |   |-- hooks |   |   |   |-- useSphericalCoords.ts |   |   |   |-- useSphericalLayout.ts |   |   |   |-- useSphericalMaterial.ts |   |   |   |-- useSphericalInteraction.ts |   |   |   -- useSphericalAnimation.ts |   |   -- types |   |       |-- spherical-types.ts |   |       -- spherical-material-types.ts |   |-- scene |   |   |-- CameraController.tsx |   |   |-- HolographicParticles.tsx |   |   |-- Scene.tsx |   |   |-- effects.tsx |   |   |-- environment.tsx |   |   |-- lighting.tsx |   |   -- voxels |   |       |-- DogCubes.tsx |   |       |-- frameTypes.ts |   |       |-- voxelConstants.ts |   |       -- voxelUtils.ts |   -- textGeometry |       |-- NavItem.tsx |       |-- NavText.tsx |       |-- navConfig.ts |       |-- useNavItemAnimation.ts |       -- useTextGeometry.ts |-- data |   -- dog_pixels.json |-- hooks |   |-- useDevice.ts |   -- useMobile.ts |-- lib |   -- cryptoApi.ts |-- stores |   |-- useCryptoSphere.ts |   |-- useOverlay.ts |   -- useSection.ts |-- types |   |-- hologram-types.d.ts |   -- index.d.ts |-- public |   -- jeep.png |-- scripts |   -- extract-dog.js |-- tsconfig.json -- package.json
+- **Aesthetic**: Holographic sci-fi HUD meets playful crypto meme culture and pixel-art warmth.
+- **Color Palette**: Deep space blacks, electric cyans/teals, vibrant DOGE yellow accents, soft neon glows.
+- **React Spring**: Smooth, intentional camera work + spring physics + GSAP timelines for premium feel.
+- **Tone**: Technically sharp yet friendly and approachable — “vibe coding” meets production craft.
 
-Brand Identity and Visual Language
+The project embodies the **DOGE / Do Only Good Everyday** spirit while pushing the boundaries of what a modern creator portfolio can be in 2026.
 
-Color Palette
+---
 
-#36b8d0 — primary hologram glow
+## 🔗 Links & Ecosystem
 
-#5f2c2b — grounding shadows and frames
+- **Main Portfolio**: [jeepmeta.xyz](https://jeepmeta.xyz)
+- **X / Twitter**: [@JeepMeta](https://x.com/JeepMeta) — Spaces co-host & builder
+- **LinkedIn**: [jeepmeta](https://www.linkedin.com/in/jeepmeta)
+- **Writing**: Articles on AI visibility & content strategy on [Paragraph](https://paragraph.com/@jeepmeta)
+- **Sharing**: Find components, code, and more on [CodePen](https://codepen.io/jeepmeta)
+- **789 Studios**: [789studios.com](https://789studios.com)
+- **OTF Media**: [otfmedia.xyz](https://otfmedia.xyz)
 
-#ffeec2 — readable text, soft glows
+---
 
-#d3bb8f — premium accents, crypto highlights
+## 🛠 Development Notes
 
-Aesthetic Pillars
+- **Performance First**: Heavy use of `drei` helpers, memoization, and device detection for smooth 60fps even on mid-range hardware.
+- **Extensibility**: The holograms and modules are designed to be reusable across other projects.
+- **Asset Workflow**: Custom scripts convert SVGs and pixel data into Three.js-ready textures.
+- **Type Safety**: Strict TypeScript + well-typed Zustand stores and custom hooks.
 
-Holographic sci‑fi HUD
+---
 
-Playful crypto character
+## 📜 License
 
-Pixel‑art nostalgia
+This project is currently **source-available for reference and inspiration**.  
+For commercial licensing of components, the Spherical Hologram Engine, or custom development work, please reach out via X (@JeepMeta) or the contact channels on jeepmeta.xyz.
 
-DOGE / Do Only Good Everyday
+---
 
-Jeepmeta as a creator brand
+## 🙏 Credits & Inspiration
 
-Motion Style
+Built with love for the **DOGE community**, the power of **React Three Fiber**, and the joy of shipping beautiful, interactive 3D web experiences.
 
-Holograms “power on”
+Special thanks to the maintainers of Three.js, R3F, drei, react-spring, GSAP, and the broader open-source 3D web community.
 
-Smooth, elastic, playful
+---
 
-Responsive to interaction
+**Jeepmeta** 🐕✨🌌
 
-Never rigid or militaristic
+> “Do Only Good Everyday”
 
-High-Level Architecture
+---
 
-Layers
-
-Rendering: R3F, Drei, Three.js, postprocessing
-
-Hologram: spherical engine, hologram materials, SVG panels
-
-UI: text geometry, nav, overlays, panels
-
-State: Zustand stores
-
-Device: breakpoints, mobile/desktop scaling
-
-Animation: react-three-spring, GSAP
-
-Data: crypto API, configs, JSON assets
-
-Scene Model
-
-Single <Scene> orchestrates camera, lighting, environment, particles, and active section.
-
-Sections mount/unmount based on Zustand state.
-
-Spherical Engine Subsystem
-
-Purpose
-
-A reusable, strictly typed engine powering:
-
-Curved hologram panels
-
-Crypto chart patches
-
-Star-map constellations
-
-Nested spheres
-
-Inner/outer projections
-
-Invisible anchors
-
-Components
-
-SphericalAnchor — radius, rotation, visibility, animation, nesting
-
-SphericalPatch — curved segments, floating panels
-
-SphericalSurface — declarative composition
-
-Hooks:
-
-useSphericalCoords — lat/lon → Cartesian
-
-useSphericalLayout — rows, grids, breakpoints
-
-useSphericalMaterial — SVG → texture, hologram presets
-
-useSphericalInteraction — click/tap/hover/gesture
-
-useSphericalAnimation — hologram entrance/exit
-
-Types — strict TS interfaces
-
-Rules
-
-No duplicated spherical math
-
-Geometry/layout/materials/interactions/animation stay separate
-
-Modes defined locally
-
-Pre-rendered SVG textures
-
-Nested spheres supported
-
-Animation and Interaction Conventions
-
-Entrance/Exit
-
-Scale from 0 → radius
-
-Emissive pulse
-
-Optional scanline flicker
-
-Shared timing curves
-
-Interaction
-
-Desktop: hover glow, click expands
-
-Mobile: larger hit-areas, tap replaces hover
-
-Consistent across all spheres
-
-Device-Aware Behavior
-
-Breakpoints
-
-Defined in Tailwind + globals.css.
-
-Behavior
-
-Sphere radius scales down on mobile
-
-Patch spacing adjusts
-
-Hit-areas increase
-
-Animation timing slows slightly
-
-Monetization and Jeepmeta Brand Integration
-
-Goals
-
-Make Jeepmeta hireable
-
-Showcase reusable components
-
-Offer downloadable/purchasable assets
-
-Monetization Surfaces
-
-Jeepmeta Hub scene
-
-Component marketplace
-
-Floating CTA orb
-
-Commission portal
-
-Brand Tone
-
-Friendly, playful, technically sharp.
-
-Coding Conventions
-
-Components
-
-Pure, declarative
-
-No mixing geometry/layout/materials
-
-Domain components compose engine pieces
-
-Hooks
-
-Named useX
-
-Typed returns
-
-No side effects beyond React lifecycle
-
-Types
-
-Centralized
-
-No implicit any
-
-Config objects must have interfaces
-
-Files
-
-Avoid micro-files
-
-Keep concerns separate
-
-Spherical engine stays in components/holograms
-
-Future Expansion
-
-New sphere modes
-
-New hologram materials
-
-New downloadable components
-
-Expanded Jeepmeta Hub
-
-Optional NFT/collectible layer
+*Last updated: June 2026*  
+*Repository: github.com/jeepmeta/r3f-portfolio*
