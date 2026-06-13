@@ -6,7 +6,6 @@ import * as THREE from "three";
 
 import { useDevice, getCameraSettings } from "@/hooks/useDevice";
 import Scene from "@/components/scene/Scene";
-import { Effects } from "@/components/scene/effects";
 import { useSection, Section } from "@/stores/useSection";
 import { NavText } from "@/components/textGeometry/NavText";
 import MatrixRainWipe from "@/components/boot/MatrixRain";
@@ -60,7 +59,6 @@ export default function Home() {
         <Suspense fallback={<LoadingScreen />}>
           <Scene />
           <NavText onNavigate={handleNavigate} />
-          <Effects />
         </Suspense>
       </Canvas>
     </main>
