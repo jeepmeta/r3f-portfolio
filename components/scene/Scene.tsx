@@ -1,4 +1,4 @@
-// components/Scene.tsx
+// components/scene/Scene.tsx
 "use client";
 
 import { useRef } from "react";
@@ -14,12 +14,20 @@ export default function Scene() {
   const groupRef = useRef<Group>(null);
   const { isMobile, isLowEnd } = useDevice();
 
+  const quality = isLowEnd ? "low" : isMobile ? "medium" : "high";
+
   return (
     <group ref={groupRef}>
       <Environment />
       <Lighting />
-      <DogCubes position={[0, 0.8, 0]} scale={1.8} />
-      <HolographicParticles count={isMobile ? 30 : isLowEnd ? 35 : 50} />
+      <DogCubes 
+        position={[0, 0.8, 0]} 
+        scale={1.8} 
+        quality={quality} 
+      />
+      <HolographicParticles 
+        count={isMobile ? 30 : isLowEnd ? 35 : 50} 
+      />
       <CameraController />
     </group>
   );

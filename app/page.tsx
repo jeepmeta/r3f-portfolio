@@ -48,19 +48,24 @@ export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-black">
       <MatrixRainWipe />
+
       <Canvas
         camera={{ position: cameraSettings.position, fov: cameraSettings.fov }}
         dpr={cameraSettings.dpr}
         gl={{
-          antialias: true,
-          alpha: false,
+          antialias: false,                    // Keep for performance (big win)
+          alpha: false,                        // ← Reverted — this gives solid deep black
           powerPreference: "high-performance",
+          preserveDrawingBuffer: false,
+          stencil: false,
         }}
         onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 1);       // ← Force pure deep black every frame
           gl.outputColorSpace = THREE.SRGBColorSpace;
           gl.toneMapping = THREE.NoToneMapping;
         }}
         style={{ position: "absolute", inset: 0 }}
+        frameloop="always"
       >
         <Suspense fallback={<LoadingScreen />}>
           <Scene />

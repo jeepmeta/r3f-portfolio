@@ -1,3 +1,4 @@
+// components/scene/effects.tsx
 "use client";
 
 import { memo } from "react";
@@ -9,23 +10,34 @@ import {
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 
-export const Effects = memo(function Effects() {
+interface EffectsProps {
+  quality?: "low" | "medium" | "high";
+}
+
+export const Effects = memo(function Effects({ quality = "high" }: EffectsProps) {
+  const isLow = quality === "low";
+
   return (
     <EffectComposer>
-      {/* Strong cinematic bloom for holographic glow */}
-      <Bloom
-        intensity={0.1}
-        luminanceThreshold={0.1}
-        luminanceSmoothing={0.1}
-        height={200}
-        mipmapBlur
-      />
+      {/* Bloom is the most expensive pass — heavily reduced on low quality */}
+      {isLow ? <></> : (
+        <Bloom
+          intensity={0.1}
+          luminanceThreshold={0.1}
+          luminanceSmoothing={0.1}
+          height={200}
+          mipmapBlur
+        />
+      )}
 
-      {/* Subtle vignette to focus center & add cinematic feel */}
       <Vignette eskil={false} offset={0.15} darkness={1.05} />
 
-      {/* Very light noise/grain for filmic texture */}
-      <Noise opacity={0.02} premultiply blendFunction={BlendFunction.ADD} />
+      {/* Very subtle noise always kept for filmic feel */}
+      <Noise 
+        opacity={isLow ? 0.01 : 0.02} 
+        premultiply 
+        blendFunction={BlendFunction.ADD} 
+      />
     </EffectComposer>
   );
 });

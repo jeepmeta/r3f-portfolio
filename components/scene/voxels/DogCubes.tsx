@@ -1,4 +1,4 @@
-// app/systems/voxels/DogCubes.tsx
+// components/scene/voxels/DogCubes.tsx
 "use client";
 
 import { JSX, memo, useMemo, useRef, useEffect } from "react";
@@ -18,22 +18,40 @@ const saturate = (r: number, g: number, b: number) => {
   return color;
 };
 
-export const DogCubes = memo(function DogCubes(
-  props: JSX.IntrinsicElements["group"],
-) {
-  const materialsRef = useRef<THREE.MeshPhysicalMaterial[]>([]);
+type DogCubesProps = JSX.IntrinsicElements["group"] & {
+  quality?: "low" | "medium" | "high";
+};
+
+export const DogCubes = memo(function DogCubes({
+  quality = "high",
+  ...props
+}: DogCubesProps) {
+  const instancedMeshRef = useRef<THREE.InstancedMesh>(null!);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
   const { camera } = useThree();
 
-  const geometry = useMemo(() => new THREE.BoxGeometry(CUBE, CUBE, CUBE), []);
+  const geometry = useMemo(() => {
+    const segments = quality === "low" ? 1 : quality === "medium" ? 2 : 3;
+    return new THREE.BoxGeometry(CUBE, CUBE, CUBE, segments, segments, segments);
+  }, [quality]);
 
-  // Build voxel list from ANY visible pixel in ANY frame
+  // Single lightweight material (Basic is sufficient and faster here)
+  const material = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        toneMapped: false,
+        fog: false,
+      }),
+    []
+  );
+
+  // Build voxel list (same logic as before)
   const voxelData = useMemo(() => {
-    const list: { x: number; y: number; pos: THREE.Vector3 }[] = [];
+    const list: { x: number; y: number; pos: THREE.Vector3; key: string }[] = [];
 
     for (let y = 0; y < GRID; y++) {
       for (let x = 0; x < GRID; x++) {
         let visible = false;
-
         for (let f = 0; f < pixelFrames.length; f++) {
           const px = pixelFrames[f][y]?.[x];
           if (px && px[3] > 10) {
@@ -41,21 +59,20 @@ export const DogCubes = memo(function DogCubes(
             break;
           }
         }
-
         if (visible) {
           list.push({
             x,
             y,
             pos: new THREE.Vector3(x * CUBE - HALF, -y * CUBE + HALF, 0),
+            key: `${y},${x}`,
           });
         }
       }
     }
-
     return list;
   }, []);
 
-  // SAMPLE EYEBROW COLORS ONCE
+  // Precomputed special colors (same as original)
   const eyebrowHighlightColor = useMemo(() => {
     const px = pixelFrames[0][8]?.[19];
     return px && px[3] > 10
@@ -70,7 +87,6 @@ export const DogCubes = memo(function DogCubes(
       : new THREE.Color("#888888");
   }, []);
 
-  // SAMPLE FUR COLOR ONCE
   const furColor = useMemo(() => {
     const px = pixelFrames[0][FUR_REF[0]]?.[FUR_REF[1]];
     return px && px[3] > 10
@@ -78,7 +94,7 @@ export const DogCubes = memo(function DogCubes(
       : new THREE.Color("#888888");
   }, []);
 
-  // RANDOMIZED BLINK STATE MACHINE
+  // Blink state machine (unchanged logic)
   const isBlinkingRef = useRef(false);
   const nextBlinkTimeRef = useRef(0);
   const blinkEndTimeRef = useRef(0);
@@ -87,20 +103,36 @@ export const DogCubes = memo(function DogCubes(
     nextBlinkTimeRef.current = performance.now() + 1000 + Math.random() * 3000;
   }, []);
 
+  // Initialize instance matrices + colors once
+  useEffect(() => {
+    const mesh = instancedMeshRef.current;
+    if (!mesh) return;
+
+    voxelData.forEach((v, i) => {
+      dummy.position.copy(v.pos);
+      dummy.scale.setScalar(1);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+      mesh.setColorAt(i, furColor); // initial color
+    });
+
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  }, [voxelData, furColor, dummy]);
+
   useFrame(({ clock }) => {
+    const mesh = instancedMeshRef.current;
+    if (!mesh) return;
+
     const t = clock.elapsedTime;
     const now = performance.now();
 
-    // Start blink
+    // Blink timing (exact same logic)
     if (!isBlinkingRef.current && now >= nextBlinkTimeRef.current) {
       isBlinkingRef.current = true;
-
-      // Blink lasts 120–180ms
       blinkEndTimeRef.current = now + (120 + Math.random() * 60);
 
-      // 15% chance of double-blink
       const isDouble = Math.random() < 0.15;
-
       if (isDouble) {
         nextBlinkTimeRef.current =
           blinkEndTimeRef.current + (150 + Math.random() * 80);
@@ -109,89 +141,78 @@ export const DogCubes = memo(function DogCubes(
       }
     }
 
-    // End blink
     if (isBlinkingRef.current && now >= blinkEndTimeRef.current) {
       isBlinkingRef.current = false;
     }
 
     const blink = isBlinkingRef.current;
 
-    // EYEBROW POSITIONS
     const eyebrowRest = ["8,19", "9,19", "9,20"];
     const eyebrowBlink = ["9,19", "10,19", "10,20"];
     const eyebrowPositions = blink ? eyebrowBlink : eyebrowRest;
-
     const highlightKey = eyebrowPositions[0];
 
-    // EYE TRACKING
     const lookRight = camera.position.x > 3.8;
     const eyeBlackKey = lookRight ? "10,20" : "10,19";
     const eyeWhiteKey = lookRight ? "10,19" : "10,20";
 
+    const currentFrame = pixelFrames[Math.floor(t * 8) % pixelFrames.length];
+
     voxelData.forEach((v, i) => {
-      const mat = materialsRef.current[i];
-      if (!mat) return;
+      const key = v.key;
+      const px = currentFrame[v.y]?.[v.x];
 
-      const key = `${v.y},${v.x}`;
-      const px =
-        pixelFrames[Math.floor(t * 8) % pixelFrames.length][v.y]?.[v.x];
+      let color: THREE.Color = furColor;
+      let visible = true;
 
-      // SPECIAL BLINK OVERRIDES (must run BEFORE eyebrow override)
+      // Special blink overrides
       if (blink && (key === "8,19" || key === "9,20")) {
-        mat.visible = true;
-        mat.color.copy(furColor);
-        return;
+        color = furColor;
       }
-
-      // EYEBROW OVERRIDE
-      if (eyebrowPositions.includes(key)) {
-        mat.visible = true;
-
-        if (key === highlightKey) {
-          mat.color.copy(eyebrowHighlightColor);
-        } else {
-          mat.color.copy(eyebrowBrowColor);
-        }
-
-        return;
+      // Eyebrow override
+      else if (eyebrowPositions.includes(key)) {
+        color = key === highlightKey ? eyebrowHighlightColor : eyebrowBrowColor;
       }
-
-      // EYE OVERRIDE (only when not blinking)
-      if (!blink) {
+      // Eye override (when not blinking)
+      else if (!blink) {
         if (key === eyeBlackKey) {
-          mat.visible = true;
-          mat.color.set("#000000");
-          return;
-        }
-        if (key === eyeWhiteKey) {
-          mat.visible = true;
-          mat.color.set("#ffffff");
-          return;
+          color = new THREE.Color("#000000");
+        } else if (key === eyeWhiteKey) {
+          color = new THREE.Color("#ffffff");
+        } else if (!px || px[3] <= 10) {
+          visible = false;
+        } else {
+          color = saturate(px[0] / 255, px[1] / 255, px[2] / 255);
         }
       }
-
-      // NORMAL SPRITE COLOR
-      if (!px || px[3] <= 10) {
-        mat.visible = false;
-        return;
+      // Normal sprite color
+      else if (!px || px[3] <= 10) {
+        visible = false;
+      } else {
+        color = saturate(px[0] / 255, px[1] / 255, px[2] / 255);
       }
 
-      mat.visible = true;
-      mat.color.copy(saturate(px[0] / 255, px[1] / 255, px[2] / 255));
+      // Update instance
+      dummy.position.copy(v.pos);
+      dummy.scale.setScalar(visible ? 1 : 0);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+
+      if (visible) {
+        mesh.setColorAt(i, color);
+      }
     });
+
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   });
 
   return (
     <group {...props}>
-      {voxelData.map((v, i) => (
-        <mesh key={i} position={v.pos} geometry={geometry}>
-          <meshPhysicalMaterial
-            ref={(m) => m && (materialsRef.current[i] = m)}
-            toneMapped={false}
-            fog={false}
-          />
-        </mesh>
-      ))}
+      <instancedMesh
+        ref={instancedMeshRef}
+        args={[geometry, material, voxelData.length]}
+      />
     </group>
   );
 });
