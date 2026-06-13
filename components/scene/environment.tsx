@@ -13,7 +13,7 @@ export const Environment = memo(function Environment() {
       <Stars
         radius={120}
         depth={60}
-        count={4000}
+        count={2500}
         factor={5}
         saturation={1}
         fade
