@@ -43,7 +43,7 @@ function seededRandom(seed: number): number {
 }
 
 export const HolographicParticles = memo(function HolographicParticles({
-  count = 400,
+  count = 600,
 }: {
   count?: number;
 }) {
